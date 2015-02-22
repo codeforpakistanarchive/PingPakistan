@@ -1,0 +1,28 @@
+﻿posts.html
+<div class="postscontainer">
+@foreach (var post in ViewBag.posts)
+{
+<div class="row">
+    <div class="col-sm-10">
+        <p>
+            @post.post_text
+        </p>
+        <h4>
+            <span class="label label-default pull-right">@post.username</span>
+        </h4>
+        <h4>
+            <small class="text-muted">
+                @post.date_added •
+                <a href="#" class="text-muted">I agree (@post.agree_count)</a> •
+                <a href="#" class="text-muted">Read More</a>
+            </small>
+        </h4>
+    </div>
+    <div class="col-sm-2">
+        <a href="#" class="pull-right">
+            <img src="/img/profile-img.png" class="img-circle">
+        </a>
+    </div>
+</div>
+}
+</div>

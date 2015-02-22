@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ping_pakistanModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="categories">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="250" />
+    <Property Name="date_added" Type="datetime" />
+    <Property Name="date_updated" Type="datetime" />
+  </EntityType>
+  <EntityType Name="cities">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="city_name" Type="varchar" MaxLength="150" />
+    <Property Name="date_added" Type="datetime" />
+  </EntityType>
+  <EntityType Name="city_areas">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="area_name" Type="varchar" MaxLength="150" />
+    <Property Name="city_id" Type="int" />
+    <Property Name="date_added" Type="datetime" />
+    <Property Name="is_deleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="posts">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="category_id" Type="int" />
+    <Property Name="text" Type="varchar(max)" />
+    <Property Name="is_approved" Type="bit" />
+    <Property Name="is_deleted" Type="bit" />
+    <Property Name="agree_count" Type="int" />
+    <Property Name="disagree_count" Type="int" />
+    <Property Name="date_added" Type="datetime" />
+    <Property Name="date_updated" Type="datetime" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="150" />
+    <Property Name="email" Type="varchar" MaxLength="150" />
+    <Property Name="password" Type="varchar" MaxLength="50" />
+    <Property Name="ip_address" Type="varchar" MaxLength="50" />
+    <Property Name="verification_code" Type="varchar" MaxLength="50" />
+    <Property Name="is_verified" Type="bit" />
+    <Property Name="date_added" Type="datetime" />
+    <Property Name="phone_number" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityContainer Name="ping_pakistanModelStoreContainer">
+    <EntitySet Name="categories" EntityType="Self.categories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="cities" EntityType="Self.cities" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="city_areas" EntityType="Self.city_areas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="posts" EntityType="Self.posts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

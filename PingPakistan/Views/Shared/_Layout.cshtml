@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+            <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.autosize.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <style>
+    </style>
+    <script type="text/javascript">
+
+        function signup() {
+            $.post("/users/AddUser", { username: $("#username").val(), email: $("#email").val(), password: $("#password").val(), phone_number: $("#password").val() }, function (response) {
+                localStorage['pp_user_id'] = response;
+                window.location.reload();
+            });
+        }
+
+        function signout() {
+            $.getJSON("/users/Signout", {}, function (response) {
+                //localStorage['pp_user_id'] = null;
+                window.location.reload();
+            });
+        }
+
+        function signin() {
+            $.getJSON("/users/Authenticate", { username: $("#si_username").val(), password: $("#si_password").val() }, function (response) {
+                if (response.status == "ok") {
+                    window.location.reload();
+                }
+                else {
+                    alert("invalid username or password.");
+                }
+            });
+        }
+
+        function newPost() {
+            $.post("/posts/NewPost", { user_id: localStorage["pp_user_id"], category_id: $("#category_id").val(), text: $("#post_text").val() }, function (response) {
+                //localStorage['pp_user_id'] = null;
+                $("#postscontainer").prepend();
+            });
+        }
+
+        $(document).ready(function () {
+            expandTextarea('#Problemtxtarea');
+            $('#Problemtxtarea').on('focus', function () {
+                $('#Problemtxtarea').prop('rows', '5');
+                $('#postproblem').show();
+                $('#tutbtn').show();
+            });
+
+            //            $('#Problemtxtarea').on('blur', function () {
+            //                var text = $('#Problemtxtarea').val();
+            //                var lines = text.split(/\r|\r\n|\n/);
+            //                var count = lines.length;
+            //                if (count < 5) {
+            //                    $('#Problemtxtarea').css('height', 'auto');
+            //                }
+
+            //                $('#Problemtxtarea').prop('rows', '1');
+            //                $('#postproblem').hide();
+            //                $('#tutbtn').hide();
+            //            });
+        });
+
+        function expandTextarea(id) {
+            var $element = $(id).get(0);
+            $element.addEventListener('keyup', function () {
+                this.style.overflow = 'hidden';
+                var text = $('#Problemtxtarea').val();
+                var lines = text.split(/\r|\r\n|\n/);
+                var count = lines.length;
+                if (count > 5) {
+                    this.style.height = this.scrollHeight + 'px';
+                }
+            }, false);
+        }
+    </script>
+    <div class="wrapper">
+        <div class="box">
+            <div class="row">
+                <!-- sidebar -->
+                <div class="column col-sm-3" id="sidebar">
+                    <a class="logo" href="#">PP</a>
+                    <ul class="nav">
+                        @foreach (var category in ViewBag.categories)
+                        {
+                            <li class="active"><a href="/categories/posts/@category.id">@category.name</a> </li>
+                        }
+                    </ul>
+                    <ul class="nav hidden-xs" id="sidebar-footer">
+                        <li>
+                            <a>
+                                <h3>
+                                    Ping Pakistan
+                                </h3>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /sidebar -->
+                <!--PopUps-->
+                <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title">
+                                    Sign In
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <!-- The form is placed inside the body of modal -->
+                                <form id="loginForm" class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label pull-left">
+                                            Username
+                                        </label>
+                                        <div class="col-xs-5">
+                                            <input type="text" class="form-control" name="username" id="si_username" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label pull-left">
+                                            Password
+                                        </label>
+                                        <div class="col-xs-5">
+                                            <input type="password" class="form-control" name="password" id="si_password"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-5 col-xs-offset-3">
+                                            <button type="submit" class="btn btn-primary">
+                                                Sign In
+                                            </button>
+                                            <button type="submit" class="btn btn-default">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="SignupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title">
+                                    Sign Up
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <!-- The form is placed inside the body of modal -->
+                                <form id="SignupForm" class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label pull-left">
+                                            Username
+                                        </label>
+                                        <div class="col-xs-5">
+                                            <input type="text" class="form-control" name="username" id="username" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label pull-left">
+                                            Email
+                                        </label>
+                                        <div class="col-xs-5">
+                                            <input type="email" class="form-control" name="password" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label pull-left">
+                                            Password
+                                        </label>
+                                        <div class="col-xs-5">
+                                            <input type="password" class="form-control" name="password" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label pull-left">
+                                            Phone number
+                                        </label>
+                                        <div class="col-xs-5">
+                                            <input type="tel" class="form-control" name="password" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-5 col-xs-offset-3">
+                                            <button type="submit" class="btn btn-primary">
+                                                Sign Up
+                                            </button>
+                                            <button type="submit" class="btn btn-default">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /PopUps -->
+                <!-- main -->
+                <div class="column col-sm-9" id="main">
+                    <div class="padding">
+                        <div class="full col-sm-9">
+                            <div class="col-sm-12" style="text-align: right;">
+                                @if (ViewBag.isLoggedIn)
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="signout()">
+                                        Sign Out
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                                        Sign in
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#SignupModal">
+                                        Sign up
+                                    </button>
+                                }
+
+                            </div>
+                            <!--<p>Concept: An anecdote always starts with Today and ends with PP. There are no taboo subjects, feel free to express yourself.</p>
+                            -->
+                            <!-- content -->
+                                @if (ViewBag.isLoggedIn)
+                                {
+                                }
+                                <div class="col-sm-8" id="comment">
+                                    <div class="form-group">
+                                        <label for="comment">
+                                            My problem:
+                                        </label>
+                                        <textarea class="form-control" id="Problemtxtarea" maxlength="300"></textarea>
+
+                                        <button id="postproblem" type="button" class="btn btn-primary pull-right" style="margin-top: 5px; margin-left: 5px; display:none;" ">
+                                            Post
+                                        </button>
+
+                                        <button class="btn btn-default dropdown-toggle pull-right" type="button" id="tutbtn"
+                                                data-toggle="dropdown" style="margin-top: 5px; display:none;">
+                                            Categories <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="tutbtn">
+                                            @foreach (var category in ViewBag.categories)
+                                            {
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">@category.name</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                            
+
+                                <div class="col-sm-12" id="featured">
+                                    <div class="page-header text-muted">
+                                        Experiences
+                                    </div>
+                                </div>
+                                <!--/top story-->
+                                @RenderBody()
+
+
+
+                                <div class="col-sm-12">
+                                    <div class="page-header text-muted divider">
+                                        Connect with Us
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a href="#">Twitter</a> <small class="text-muted">|</small> <a href="#">Facebook</a>
+                                        <small class="text-muted">|</small> <a href="#">Google+</a>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row" id="footer">
+                                    <div class="col-sm-6">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>
+                                            <a href="#" class="pull-right">©Copyright Inc.</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <hr>
+                            </div>
+                            <!-- /col-9 -->
+                        </div>
+                        <!-- /padding -->
+                    </div>
+                    <!-- /main -->
+                </div>
+            </div>
+        </div>
+        <!-- script references -->
+        <script src="js/jquery.min.js"></script>
+                                <script src="js/bootstrap.min.js"></script>
+                            </body>
+                        </html>
